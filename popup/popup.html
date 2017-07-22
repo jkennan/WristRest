@@ -2,9 +2,11 @@
 <html>
   <body>
     <script src="popup.js"></script>
-    <div class="container">
-      <div class="col-xs-12">
-        <button type="button" onclick="startTimer()">Start Timer</button>
+    <div>
+      <div>
+        <button type="button" onclick="startClock()">Start Timer</button>
+        <button type="button" onclick="stopClock()">Stop timer</button>
+        <h3>You've been working for <strong id="total-time-elapsed"></strong></h3>
         <h3><strong id="micro-break-time-left"></strong> mins until your next micro break.</h3>
         <h3><strong id="rest-break-time-left"></strong> mins until your next rest break.</h3>
     </div>
