@@ -6,10 +6,13 @@ let timerVar;
 
 
 // Startups
-console.log(70 / 60 % 60);
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("startButton").addEventListener("click", startClock);
+    document.getElementById("stopButton").addEventListener("click", stopClock);
+});
 
 
-function startClock() {
+function startClock(e) {
 
     timerVar = setInterval(function () {
         totalTime++;
@@ -22,7 +25,7 @@ function startClock() {
 }
 
 
-function stopClock() {
+function stopClock(e) {
     clearInterval(timerVar);
 }
 
@@ -30,15 +33,13 @@ function stopClock() {
 function checkReps() {
     if (reps != 0) {
         reps--;
+        alert("It's time for a micro-break.");
     } else {
-        alert("else condition reached");
+        alert("It's time for a rest-break.");
+        reps = 3;
     }
 }
 
-
-function reloadPage_dep() {
-    document.getElementById("micro-break-time-left").innerHTML = getTimeString();
-}
 
 function reloadPage() {
 

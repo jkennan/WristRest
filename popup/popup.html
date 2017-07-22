@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <body>
+  <head>
+    <!-- Import Lato font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+    <!-- Import Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="popup.css">
+
+    <!-- Import main script -->
     <script src="popup.js"></script>
+  </head>
+  <body>
     <div>
       <div>
-        <button type="button" onclick="startClock()">Start Timer</button>
-        <button type="button" onclick="stopClock()">Stop timer</button>
+        <h1>WristRest</h1>
+        <button type="button" id="startButton">Start Timer</button>
+        <button type="button" id="stopButton">Stop timer</button>
         <h3>You've been working for <strong id="total-time-elapsed"></strong></h3>
         <h3><strong id="micro-break-time-left"></strong> mins until your next micro break.</h3>
         <h3><strong id="rest-break-time-left"></strong> mins until your next rest break.</h3>
