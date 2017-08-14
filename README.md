@@ -33,7 +33,7 @@ Coming soon to WristRest:
 1. Ability to skip or postpone breaks
 1. Edge extension
 1. Consider upgrading to Chrome's Event Pages/Alarm API paradigm to save on performance, but need to figure out how to best do that while 
-   still maintaining the basic functionality of the app.
+   still maintaining the basic functionality of the app. __(in progress)__
 
 ## Contributing
 Go nuts. I don't really care what you do. Just open a pull request, and if you feel like it, shoot me a message saying what you're doing. 
