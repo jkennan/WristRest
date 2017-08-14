@@ -3,7 +3,7 @@
   
   "name": "WristRest",
   "version": "0.1",
-  "description": "A timer that sits in Edge and makes sure you take breaks from typing to try to prevent RSI",
+  "description": "A timer that sits in Chrome and makes sure you take breaks from typing to try to prevent RSI",
 
   "browser_action": {
     "default_icon": "icons/wrist-tmp.png",
@@ -11,6 +11,12 @@
   },
 
   "permissions": [
-    "activeTab"
-  ]
+    "alarms"
+  ],
+
+
+  "background": {
+    "scripts": ["assets/jquery-3.2.1.min.js", "eventHandlers.js"],
+    "persistent": false
+  }
 }

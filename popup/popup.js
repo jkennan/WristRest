@@ -1,32 +1,30 @@
-let microInterval = 600000; // Hard-coded @ 10 mins
-let restInterval = 1800000; // Hard-set @ 30 mins
-let reps = 3;
+'use strict'
+
 let totalTime = 0;
-let timerVar;
+let breakTimer;
 
 
 // Startups
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("startButton").addEventListener("click", startClock);
-    document.getElementById("stopButton").addEventListener("click", stopClock);
+   alarmClock.setup();
 });
 
 
-function startClock(e) {
-
-    timerVar = setInterval(function () {
+function startClock(time) {
+    console.log("starting clock with time " + time);
+    breakTimer = setInterval( () => {
         totalTime++;
 
-        if (totalTime == 600) {
-            checkReps();
+        if (totalTime == time) {
+            stopClock();
         }
-        reloadPage();
+        reloadPage(time == 30 ? true : false);
     }, 1000);
 }
 
 
 function stopClock(e) {
-    clearInterval(timerVar);
+    clearInterval(breakTimer);
 }
 
 
@@ -41,7 +39,7 @@ function checkReps() {
 }
 
 
-function reloadPage() {
+function reloadPage(isMicroBreak) {
 
     // Create time objects
     let secs = totalTime % 60;
@@ -50,7 +48,25 @@ function reloadPage() {
     // let hrs = Math.floor(mins / 60);
 
     // Create and update popup page
-    document.getElementById("total-time-elapsed").innerHTML = String(mins) + ":" + (secs < 10 ? "0" + String(secs) : String(secs));
-    document.getElementById("micro-break-time-left").innerHTML = String(9 - mins) + ":" + (String(60 - secs) < 10 ? "0" + String(60 - secs) : String(60 - secs));
-    document.getElementById("rest-break-time-left").innerHTML = String((10 * reps - 1) - mins) + ":" + (String(60 - secs) < 10 ? "0" + String(60 - secs) : String(60 - secs));
+    document.getElementById("break-type").innerHTML = isMicroBreak ? "micro" : "rest";
+    document.getElementById("break-time-left").innerHTML = String(9 - mins) + ":" + (String(60 - secs) < 10 ? "0" + String(60 - secs) : String(60 - secs));
+}
+
+
+const alarmClock = {
+    onHandler : function(e) {
+        chrome.alarms.create("timerAlarm", 
+        {
+            periodInMinutes : 0.1 // For debugging - change to 10 for release. Currently 6 seconds
+        });
+    },
+
+    offHandler : function(e) {
+        chrome.alarms.clear("timerAlarm");
+    },
+
+    setup : function() {
+        document.getElementById("startButton").addEventListener("click", alarmClock.onHandler);
+        document.getElementById("stopButton").addEventListener("click", alarmClock.offHandler);
+    },
 }
