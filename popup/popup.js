@@ -1,72 +1,46 @@
-'use strict'
-
 let totalTime = 0;
 let breakTimer;
 
 
 // Startups
 document.addEventListener("DOMContentLoaded", () => {
-   alarmClock.setup();
+    document.getElementById("startButton").addEventListener("click", () => {
+        if (chrome.alarms.get("timerAlarm") == null) {
+            chrome.runtime.sendMessage({ method: "startAlarm" });
+        }
+    });
+
+    document.getElementById("stopButton").addEventListener("click", () => {
+        chrome.runtime.sendMessage({ method: "stopAlarm" });
+        stopClock();
+    });
 });
 
-
-function startClock(time) {
-    console.log("starting clock with time " + time);
-    breakTimer = setInterval( () => {
-        totalTime++;
-
-        if (totalTime == time) {
-            stopClock();
-        }
-        reloadPage(time == 30 ? true : false);
-    }, 1000);
-}
-
-
-function stopClock(e) {
-    clearInterval(breakTimer);
-}
-
-
-function checkReps() {
-    if (reps != 0) {
-        reps--;
-        alert("It's time for a micro-break.");
-    } else {
-        alert("It's time for a rest-break.");
-        reps = 3;
+chrome.runtime.onMessage.addListener((request, sender, response) => {
+    if (request.method != null && request.method == 'reloadPage') {
+        reloadPage(request.isMicroBreak, request.time);
     }
-}
+})
 
 
-function reloadPage(isMicroBreak) {
+function reloadPage(isMicroBreak, time) {
 
     // Create time objects
-    let secs = totalTime % 60;
-    let mins = Math.floor(totalTime / 60);
+    let secs = time % 60;
+    let mins = Math.floor(time / 60);
     // Hours code to be implemented later
     // let hrs = Math.floor(mins / 60);
 
+
+    let s;
+    if (isMicroBreak) {
+        s = String(30 - secs) + " seconds";
+    } else {
+        s = "0" + String(5 - mins) + ":" + (secs < 10 ? "0" : "") + String(60 - secs);
+    }
+
     // Create and update popup page
-    document.getElementById("break-type").innerHTML = isMicroBreak ? "micro" : "rest";
-    document.getElementById("break-time-left").innerHTML = String(9 - mins) + ":" + (String(60 - secs) < 10 ? "0" + String(60 - secs) : String(60 - secs));
+    document.getElementById("break-info").innerHTML = "You're on a " + (isMicroBreak ? "micro break." : "rest break.");
+    document.getElementById("break-time-left").innerHTML = s;
 }
 
-
-const alarmClock = {
-    onHandler : function(e) {
-        chrome.alarms.create("timerAlarm", 
-        {
-            periodInMinutes : 0.1 // For debugging - change to 10 for release. Currently 6 seconds
-        });
-    },
-
-    offHandler : function(e) {
-        chrome.alarms.clear("timerAlarm");
-    },
-
-    setup : function() {
-        document.getElementById("startButton").addEventListener("click", alarmClock.onHandler);
-        document.getElementById("stopButton").addEventListener("click", alarmClock.offHandler);
-    },
-}
